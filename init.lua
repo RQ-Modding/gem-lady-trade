@@ -4,7 +4,7 @@
 --
 -- It works on the game's own code through rq.ain (notes/plans/plan-gem-lady.md in the workspace):
 -- a hook on the list's "Take Quest@<name>?" question (選択_確認_拡張 with id 11, asked by
--- T_Quest::execOk), and the game's own dialog pieces for the three choices.
+-- T_Quest::execOk), answered with the game's dialog and a third choice (rq.ui.ask, loader 2.19.0).
 
 local MOD = "Gem Lady Trade"
 local call = rq.ain.call
@@ -54,26 +54,24 @@ end
 local function trade(ii)
   local got, err = rq.item.give(TALENT)
   if not got then
-    call("選択_通知", "The vault cannot take a Forbidden Talent.", "OK", false)
+    rq.ui.notice("The vault cannot take a Forbidden Talent.")
     rq.log(MOD .. ": give " .. TALENT .. " failed: " .. tostring(err))
     return false
   end
   rq.item.remove(ii)
-  call("選択_通知", "Andelmille took a Jewel.@Forbidden Talent is in the vault.", "OK", false)
+  rq.ui.notice("Andelmille took a Jewel.\nForbidden Talent is in the vault.")
   refresh_list()
   rq.log(string.format("%s: Jewel %d traded for Forbidden Talent %d", MOD, ii, got))
   return true
 end
 
--- The game's "Take Quest" question with a third choice, built as 選択_確認 builds its own.
+-- The game's "Take Quest" question with a third choice. The text is the game's own, with its @.
 local function ask(text)
-  call("ダイアログ_メッセージ追加", text)
-  call("選択_区切り追加")
-  call("選択_項目追加", YES, "Yes", -1, -1, -1, "", TAKE_SOUND)
-  call("選択_項目追加", TRADE, "Trade a Jewel", -1, -1, -1, "", -1)
-  call("選択_項目追加", NO, "No", -1, -1, -1, "", -1)
-  call("選択_カーソル設定", YES)
-  return call("選択_実行", false, 0, 0, false)
+  return rq.ui.ask(text, {
+    { id = YES, text = "Yes", sound = TAKE_SOUND },
+    { id = TRADE, text = "Trade a Jewel" },
+    { id = NO, text = "No" },
+  }, { game = true, cursor = YES })
 end
 
 rq.ain.hook("選択_確認_拡張", { before = function(h)
@@ -83,7 +81,7 @@ rq.ain.hook("選択_確認_拡張", { before = function(h)
   if not takeable() then
     -- A stale Take with no Jewel left: the quest would start without one.
     h.skip, h.result = true, false
-    call("選択_通知", "You have no Jewel.", "OK", false)
+    rq.ui.notice("You have no Jewel.")
     return
   end
   if not cleared() then return end

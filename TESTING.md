@@ -9,13 +9,14 @@ Assume nothing about the mod when it is not installed: check `logs\rqmod.log` fo
 No widget of its own. It replaces one game question:
 
 - On the quest list, select Gem Lady (quest 80; its row `quest-N` has `value` `"80"`) and press
-  `take`. When the trade is offered, the screen becomes `select` with three choices:
+  `take`. When the trade is offered, the screen becomes `select` with three choices (`select.message`
+  holds the question's text):
 
 | id | label | what |
 | --- | --- | --- |
-| `yes` | Yes | Takes the quest as the game's Yes does (autosave, then the quest) |
+| `select-yes` | Yes | Takes the quest as the game's Yes does (autosave, then the quest) |
 | `select-trade-a-jewel` | Trade a Jewel | The trade; then the game's notice (`select` with one button), and the list again |
-| `no` | No | Back to the list |
+| `select-no` | No | Back to the list |
 
 - **When it is offered:** `rq.quests.state(80) == 2` (cleared in this world) and an unlocked Jewel
   (item 258) in the vault (place 7) or the storage (place 11). The party does not matter.
