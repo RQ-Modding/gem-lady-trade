@@ -2,19 +2,16 @@
 -- quest list offers to trade a Jewel for a Forbidden Talent at once, without playing the quest.
 -- API reference: https://rq-modding.github.io/rq-modding-docs/reference/
 --
--- It works on the game's own code through rq.ain (notes/plans/plan-gem-lady.md in the workspace):
--- a hook on the list's "Take Quest@<name>?" question (選択_確認_拡張 with id 11, asked by
--- T_Quest::execOk), answered with the game's dialog and a third choice (rq.ui.ask, loader 2.19.0).
+-- notes/plans/plan-gem-lady.md in the workspace. The list's Take runs rq.quests.on_take (loader
+-- 2.23.0), before the game's "Take Quest@<name>?" question, which the mod answers with the game's
+-- dialog and a third choice (rq.ui.ask, loader 2.19.0).
 
 local MOD = "Gem Lady Trade"
-local call = rq.ain.call
 
 local QUEST = 80
 local JEWEL = 258
 local TALENT = 304            -- Forbidden Talent
-local TAKE_ID = 11            -- the "Take Quest" question's don't-ask-again id
 local TAKE_SOUND = 5012       -- the game's sound for Yes on that question
-local VAULT, STORAGE = 7, 11
 local YES, NO, TRADE = 1, 2, 3
 
 -- Cleared in this world: the game's own state, which a world transfer resets (Ｑ初期化).
@@ -24,31 +21,18 @@ end
 
 -- A Jewel the trade may take: unlocked, in the vault first, then the storage. Never a worn one.
 local function jewel()
-  local stored
-  for _, it in ipairs(rq.items()) do
-    local ii = it.id
-    if call("Ｉ固有番号", ii, -1) == JEWEL and not call("アイテム_ＬＯＣＫ中", ii) then
-      local place = call("アイテム_存在", ii)
-      if place == VAULT then return ii end
-      if place == STORAGE and not stored then stored = ii end
-    end
-  end
-  return stored
+  return rq.item.find(JEWEL, { place = { "vault", "storage" }, lock = false })[1]
 end
 
 -- The game's condition for taking the quest: any Jewel at all (Ｑ参加条件 kind 5).
 local function takeable()
-  local v = call("クエスト_有効", QUEST)
-  return v == true or v == 1
+  return rq.quests.can_take(QUEST)
 end
 
--- With the last Jewel gone the list's "Take this quest" would stay lit. T_Quest::scroll, which the
--- global scrollQuestList calls, draws the rows again and puts the list as a wheel scroll leaves it:
--- the big buttons hidden until the player picks a row again, which greys Take.
+-- With the last Jewel gone the list's "Take this quest" would stay lit: the list is drawn again,
+-- with Gem Lady's buttons as the game draws them, so Take greys (rq.quests.refresh, 2.23.0).
 local function refresh_list()
-  if takeable() then return end
-  local ok, top = pcall(rq.ain.global, "g_sQuest", "m_sList", "m_nTopIndex")
-  if ok and type(top) == "number" then pcall(call, "scrollQuestList", top) end
+  pcall(rq.quests.refresh)
 end
 
 local function trade(ii)
@@ -74,24 +58,21 @@ local function ask(text)
   }, { game = true, cursor = YES })
 end
 
-rq.ain.hook("選択_確認_拡張", { before = function(h)
-  if h.args[1] ~= TAKE_ID then return end
-  local ok, sel = pcall(rq.ain.global, "g_sQuest", "m_sList", "m_nSelectNo")
-  if not ok or sel ~= QUEST then return end
+-- Take on Gem Lady: nil leaves the game's own question, true takes the quest, false does not.
+rq.quests.on_take(function(ctx)
+  if ctx.quest ~= QUEST then return nil end
   if not takeable() then
     -- A stale Take with no Jewel left: the quest would start without one.
-    h.skip, h.result = true, false
     rq.ui.notice("You have no Jewel.")
-    return
+    return false
   end
-  if not cleared() then return end
+  if not cleared() then return nil end
   local ii = jewel()
-  if not ii then return end -- the game's own question, untouched
-  h.skip = true
-  local choice = ask(h.args[2])
-  h.result = choice == YES
+  if not ii then return nil end -- the game's own question, untouched
+  local choice = ask(ctx.text)
   if choice == TRADE then trade(ii) end
-end })
+  return choice == YES
+end)
 
 rq.log(MOD .. " loaded")
 

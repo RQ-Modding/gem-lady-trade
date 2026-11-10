@@ -18,7 +18,7 @@ quest list, without playing the quest again.
 - The trade is not a clear: the clear count, reputation and EXP do not change.
 - Without a Jewel the trade may take, or before the quest is cleared, the game's own question shows,
   unchanged.
-- After you trade your last Jewel, pick Gem Lady again on the list to see "Take this quest" greyed.
+- After you trade your last Jewel, "Take this quest" greys at once.
 
 ## Keys and settings
 
@@ -35,7 +35,7 @@ Tested with every mod in the workspace installed. It touches no other mod's data
 
 ## Install
 
-Needs [RQ MOD](https://github.com/RQ-Modding/RQ-Mod) with loader **2.13.0** or newer. Extract the
+Needs [RQ MOD](https://github.com/RQ-Modding/RQ-Mod) with loader **2.23.0** or newer. Extract the
 release zip into the game's `mods` folder, so that you have `mods/gem-lady-trade/mod.json`.
 
 ## License

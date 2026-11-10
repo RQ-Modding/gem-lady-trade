@@ -28,17 +28,18 @@ No widget of its own. It replaces one game question:
 ## How to check it
 
 1. On the town hub, set up: `rq.quests.set_state(80, 2)` and `rq.item.give(258)` twice.
-2. Quests → find Gem Lady. The list scrolls with `rq.ain.call("scrollQuestList", top)`.
+2. Quests → find Gem Lady. The list scrolls with `rq.ain.call("scrollQuestList", top)` (the game's own
+   global).
 3. Press its row, then `take`. Three choices show.
 4. Press `select-trade-a-jewel`, then the notice's button. One Jewel is gone, one more Forbidden Talent (304) is in
    the vault, the screen is `quests`, and `rq.quests.current()` is 0.
-5. With the last Jewel traded, the list is as a wheel scroll leaves it: `take` is not listed. Press
-   Gem Lady's row again (twice: the first press lets go of the row) and `take` is `enabled` false.
+5. With the last Jewel traded, the list is drawn again (`rq.quests.refresh`): `take` is listed with
+   `enabled` false.
 
 After any question over the quest list, its rows report no hover to an agent until the list is
 opened again (the game's own question does it too): go back to the hub and press `quests`.
-`rq.quests.set_state(80, 1)` does nothing on a cleared quest (the game's `Ｑ状態` takes 1 only from
-0); write `rq.ain.set_global("Ｑ", 80, "状態", 1)` to stand for a new world.
+`rq.quests.set_state(80, 1)` stands for a new world (since loader 2.23.0 it writes 1 on a cleared
+quest).
 
 ## Forcing it for a test
 

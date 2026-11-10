@@ -3,6 +3,14 @@
 Each section is a version of the mod, the `version` in `mod.json`. The release workflow copies the
 section of a tagged version into the release notes.
 
+## 1.2.0
+
+- After the last Jewel is traded, the list keeps Gem Lady's buttons with "Take this quest" greyed;
+  they were hidden until the row was picked again.
+- Works through the loader's calls (`rq.quests.on_take`, `can_take`, `refresh`, `rq.item.find`)
+  instead of the game's code by name.
+- Needs loader 2.23.0.
+
 ## 1.1.0
 
 - The question and the notices are the loader's `rq.ui.ask` and `rq.ui.notice` (loader 2.19.0)
