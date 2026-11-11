@@ -3,6 +3,14 @@
 Each section is a version of the mod, the `version` in `mod.json`. The release workflow copies the
 section of a tagged version into the release notes.
 
+## 1.3.0
+
+- The question has the game's "don't ask again" row, as the game's own "Take Quest" question has.
+  It is the game's own setting ("Take Quest" in Config's Confirmations tab): while it is off, Gem
+  Lady is taken like any quest, with no question and so no trade, until it is turned on again
+  there. Before, the mod asked even then.
+- Needs loader 2.28.0.
+
 ## 1.2.0
 
 - After the last Jewel is traded, the list keeps Gem Lady's buttons with "Take this quest" greyed;

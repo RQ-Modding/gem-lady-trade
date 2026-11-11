@@ -17,11 +17,14 @@ No widget of its own. It replaces one game question:
 | `select-yes` | Yes | Takes the quest as the game's Yes does (autosave, then the quest) |
 | `select-trade-a-jewel` | Trade a Jewel | The trade; then the game's notice (`select` with one button), and the list again |
 | `select-no` | No | Back to the list |
+| `dont-ask` | DON'T ASK AGAIN | The game's switch 11 ("Take Quest"); the window stays, its row now the "on" look (1.3.0) |
 
 - **When it is offered:** `rq.quests.state(80) == 2` (cleared in this world) and an unlocked Jewel
   (item 258) in the vault (place 7) or the storage (place 11). The party does not matter.
-- **Otherwise** the game's own two-choice question shows, `yes` and `no`, including its "don't ask
-  again" setting. The mod's question has no "don't ask again" row: it always asks.
+- **Otherwise** the game's own two-choice question shows, `yes` and `no`, with its "don't ask
+  again" row. Both questions share the game's switch 11: while `rq.ain.call("確認なし", 11)` is true,
+  neither shows, and Take on Gem Lady takes the quest at once (no trade). Turn it back on with
+  `rq.ain.call("確認なし_ＯＦＦ", 11)` or Config's Confirmations tab.
 - **No Jewel at all** (a Take button left lit): the mod refuses with the notice "You have no Jewel."
   instead of letting the quest start without one.
 
@@ -36,8 +39,9 @@ No widget of its own. It replaces one game question:
 5. With the last Jewel traded, the list is drawn again (`rq.quests.refresh`): `take` is listed with
    `enabled` false.
 
-After any question over the quest list, its rows report no hover to an agent until the list is
-opened again (the game's own question does it too): go back to the hub and press `quests`.
+While a quest is chosen, the game reads none of the list's rows (`rq.ui.get` shows them not
+`enabled`, loader 2.28.0), and it stays chosen after a question answered No. Cancel (a right click)
+lets it go; going back to the hub and pressing `quests` does too.
 `rq.quests.set_state(80, 1)` stands for a new world (since loader 2.23.0 it writes 1 on a cleared
 quest).
 
@@ -49,7 +53,9 @@ quest).
 
 ## Test Lab
 
-`test-lab/scenarios/gem-lady-trade.lua`: the three choices, the trade (one Jewel, one Forbidden
-Talent, the notice, the list stays, no quest, no autosave), No, a locked Jewel only, not cleared,
-Crook in the party, the last Jewel greying `take`, and Yes starting the quest.
+`test-lab/scenarios/gem-lady-trade.lua`: the three choices and the "don't ask again" row, the trade
+(one Jewel, one Forbidden Talent, the notice, the list stays, no quest, no autosave), No, a locked
+Jewel only, not cleared, Crook in the party, the last Jewel greying `take`, "You have no Jewel." on a
+Take left lit, Yes starting the quest after the "don't ask again" row was pressed, and the next Take
+starting the quest with no question.
 Shots: `gem-ask.png`, `gem-notice.png`.

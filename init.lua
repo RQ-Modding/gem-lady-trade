@@ -4,7 +4,8 @@
 --
 -- notes/plans/plan-gem-lady.md in the workspace. The list's Take runs rq.quests.on_take (loader
 -- 2.23.0), before the game's "Take Quest@<name>?" question, which the mod answers with the game's
--- dialog and a third choice (rq.ui.ask, loader 2.19.0).
+-- dialog and a third choice (rq.ui.ask, loader 2.19.0), and the game's "don't ask again" row for
+-- its "Take Quest" switch (remember = 11, loader 2.28.0).
 
 local MOD = "Gem Lady Trade"
 
@@ -50,12 +51,14 @@ local function trade(ii)
 end
 
 -- The game's "Take Quest" question with a third choice. The text is the game's own, with its @.
+-- "Don't ask again" is the game's switch 11 ("Take Quest" in Config's Confirmations tab), as on the
+-- game's own question: while it is off, Yes at once, so Gem Lady is taken like any quest.
 local function ask(text)
   return rq.ui.ask(text, {
     { id = YES, text = "Yes", sound = TAKE_SOUND },
     { id = TRADE, text = "Trade a Jewel" },
     { id = NO, text = "No" },
-  }, { game = true, cursor = YES })
+  }, { game = true, cursor = YES, remember = 11 })
 end
 
 -- Take on Gem Lady: nil leaves the game's own question, true takes the quest, false does not.

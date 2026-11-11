@@ -10,6 +10,9 @@ quest list, without playing the quest again.
   - **Trade a Jewel**: Andelmille takes one Jewel and a **Forbidden Talent** goes to the vault. You
     stay on the quest list.
   - **No** does nothing.
+  - **Don't ask again** is the game's own row: it turns off "Take Quest" in Config's Confirmations
+    tab, as on the game's question. While it is off, Gem Lady is taken like any quest, with no
+    question and so no trade; turn "Take Quest" on again there to trade.
 - The trade takes **one** Jewel, an unlocked one from the vault first, then from the storage. It
   never takes a locked Jewel or one a character wears. (The quest itself takes every Jewel you
   have.)
@@ -35,7 +38,7 @@ Tested with every mod in the workspace installed. It touches no other mod's data
 
 ## Install
 
-Needs [RQ MOD](https://github.com/RQ-Modding/RQ-Mod) with loader **2.23.0** or newer. Extract the
+Needs [RQ MOD](https://github.com/RQ-Modding/RQ-Mod) with loader **2.28.0** or newer. Extract the
 release zip into the game's `mods` folder, so that you have `mods/gem-lady-trade/mod.json`.
 
 ## License
