@@ -2,7 +2,7 @@
 -- quest list offers to trade a Jewel for a Forbidden Talent at once, without playing the quest.
 -- API reference: https://rq-modding.github.io/rq-modding-docs/reference/
 --
--- notes/plans/plan-gem-lady.md in the workspace. The list's Take runs rq.quests.on_take (loader
+-- The list's Take runs rq.quests.on_take (loader
 -- 2.23.0), before the game's "Take Quest@<name>?" question, which the mod answers with the game's
 -- dialog and a third choice (rq.ui.ask, loader 2.19.0), and the game's "don't ask again" row for
 -- its "Take Quest" switch (remember = 11, loader 2.28.0).

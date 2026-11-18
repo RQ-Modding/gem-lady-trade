@@ -51,9 +51,9 @@ quest).
   and `offered()`.
 - `rq.item.lock(ii)` locks a Jewel; a locked one is never taken.
 
-## Test Lab
+## Tested in the game
 
-`test-lab/scenarios/gem-lady-trade.lua`: the three choices and the "don't ask again" row, the trade
+The Test Lab's scenario `gem-lady-trade`: the three choices and the "don't ask again" row, the trade
 (one Jewel, one Forbidden Talent, the notice, the list stays, no quest, no autosave), No, a locked
 Jewel only, not cleared, Crook in the party, the last Jewel greying `take`, "You have no Jewel." on a
 Take left lit, Yes starting the quest after the "don't ask again" row was pressed, and the next Take
