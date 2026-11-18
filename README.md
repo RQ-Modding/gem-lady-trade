@@ -3,6 +3,16 @@
 Once you have cleared **Gem Lady** in this world, trade a Jewel for a Forbidden Talent from the
 quest list, without playing the quest again.
 
+## Showcase
+
+### Trying to join Gem Lady Quest
+
+<img width="467" height="325" alt="image" src="https://github.com/user-attachments/assets/d37b401a-71c7-481a-889b-20e09171ff5d" />
+
+### Trading the jewel
+
+<img width="471" height="202" alt="image" src="https://github.com/user-attachments/assets/e0eb32d6-0e00-4b13-b47c-e40a1706c6bf" />
+
 ## What it changes
 
 - Taking **Gem Lady** from the quest list asks "Take Quest@Gem Lady?" with three choices:
